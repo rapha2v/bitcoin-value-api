@@ -1,5 +1,11 @@
 import db from "../entities/knex.js"
 
+/**
+ * @typedef {Object} where
+ * @property {string} raw
+ * @property {any[]} value
+ **/
+
 class RepositoryDefault {
   /**
    * @param {string} table
@@ -10,7 +16,9 @@ class RepositoryDefault {
 
   async get_all_data() {
     try {
-      return db(this.table).select("*")
+      const res = await db(this.table).select("*")
+      await db.destroy();
+      return res;
     } catch (e) {
       throw new Error(`Error ao retornar todos os dados da tabela ${this.table}.`)
     }
@@ -19,16 +27,27 @@ class RepositoryDefault {
   async insert_data(data) {
     try {
       await db(this.table).insert(data)
+      await db.destroy();
     } catch (e) {
-      throw new Error(`Erro ao inserir dado na tabela ${this.table}`)
+      throw new Error(`Erro ao inserir dado na tabela ${this.table}.`)
     }
   }
 
-  async last_insert_data() {
+  /**
+   * @param {where} where
+   * @param {number} limit
+   **/
+  async recent_insert_data(where, limit) {
     try {
-      return await db(this.table).select("*").orderBy("id", "desc").limit(1)
+      const res = await db(this.table)
+        .select("*")
+        .whereRaw(where.raw, where.value)
+        .orderBy("id", "desc")
+        .limit(limit)
+      await db.destroy();
+      return res;
     } catch (e) {
-      throw new Error(`Erro ao pegar o último valor da tabela ${this.table}`)
+      throw new Error(`Erro ao pegar o(s) valor(es) recente(s) da tabela ${this.table}.`)
     }
   }
 }
