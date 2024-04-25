@@ -1,0 +1,7 @@
+node_module/
+.idea/
+.vscode/
+*.code-workspace
+data/
+.git/
+package-lock.json
