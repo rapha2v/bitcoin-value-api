@@ -1,0 +1,35 @@
+version: "3.x"
+
+services:
+  api:
+    container_name: api-candles.node-20.12
+    build: .
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - db
+    networks:
+      - bitcoin-value-candle-generate_producer_networking
+
+  db:
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: default
+    volumes:
+       - ./data:/var/lib/postgresql/data
+    ports:
+      - ${PORT_DB}:${PORT_DB}
+    networks:
+      - bitcoin-value-candle-generate_producer_networking
+
+networks:
+  bitcoin-value-candle-generate_producer_networking:
+    external: true
