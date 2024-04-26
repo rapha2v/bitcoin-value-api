@@ -7,10 +7,13 @@ import CandlesRepository from "../repository/candles-repository.js"
  **/
 export const consumer_candle = async (channel) => {
   channel.consume(process.env.QUEUE_CANDLES, async (msg) => {
-    const candle = JSON.parse(msg.content.toString())
-    console.log("Message received.")
-    channel.ack(msg)
+    const candle = JSON.parse(msg.content.toString());
+    console.log("Iniciando inserção da mensagem:");
+    console.log(candle);
     const repository = new CandlesRepository();
-    repository.insert_candle(candle);
+    await repository.insert_candle(candle);
+    console.log("Mensagem salva com sucesso.");
+    channel.ack(msg);
+    console.log("Mensagem recebida.");
   })
 }
