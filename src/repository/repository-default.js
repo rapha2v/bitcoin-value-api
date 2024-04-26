@@ -14,21 +14,21 @@ class RepositoryDefault {
     this.table = table
   }
 
-  async get_all_data() {
+  async _get_all_data() {
     try {
       const res = await db(this.table).select("*")
-      await db.destroy();
       return res;
     } catch (e) {
+      console.log(e);
       throw new Error(`Error ao retornar todos os dados da tabela ${this.table}.`)
     }
   }
 
-  async insert_data(data) {
+  async _insert_data(data) {
     try {
       await db(this.table).insert(data)
-      await db.destroy();
     } catch (e) {
+      console.log(e);
       throw new Error(`Erro ao inserir dado na tabela ${this.table}.`)
     }
   }
@@ -37,18 +37,22 @@ class RepositoryDefault {
    * @param {where} where
    * @param {number} limit
    **/
-  async recent_insert_data(where, limit) {
+  async _recent_insert_data(where, limit) {
     try {
       const res = await db(this.table)
         .select("*")
         .whereRaw(where.raw, where.value)
         .orderBy("id", "desc")
         .limit(limit)
-      await db.destroy();
       return res;
     } catch (e) {
+      console.log(e);
       throw new Error(`Erro ao pegar o(s) valor(es) recente(s) da tabela ${this.table}.`)
     }
+  }
+
+  async close_connection() {
+    db.destroy();
   }
 }
 
