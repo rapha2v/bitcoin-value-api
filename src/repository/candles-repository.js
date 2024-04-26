@@ -6,11 +6,11 @@ class CandlesRepository extends RepositoryDefault {
   }
 
   async insert_candle(data) {
-    await this.insert_data(data);
+    await this._insert_data(data);
   }
 
   async recent_candle_per_currency(currency, limit) {
-    return this.recent_insert_data(
+    return this._recent_insert_data(
       { raw: "currency = ?", value: [currency] },
       limit
     );
