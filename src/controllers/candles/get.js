@@ -1,5 +1,7 @@
-import { request, response, next } from "express"
+import express from "express"
 import CandlesRepository from "../../repository/candles-repository.js"
+
+const { request, response, next } = express;
 
 class GetCandles {
 
@@ -12,7 +14,7 @@ class GetCandles {
     const currency = req.params.currency;
     const quantity = parseInt(req.params.quantity) || 5;
     const repositoryCandles = new CandlesRepository();
-    const recentCandles = repositoryCandles.recent_insert_data(
+    const recentCandles = await repositoryCandles.recent_candle_per_currency(
       currency,
       quantity
     );
@@ -21,3 +23,5 @@ class GetCandles {
     })
   }
 }
+
+export default new GetCandles();

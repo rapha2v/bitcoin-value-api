@@ -1,13 +1,10 @@
 import { Router } from "express";
+import GetCandles from "../controllers/candles/get.js";
 
 const route = Router();
 
-route.get("/:quantity", (req, res) => {
-  const quantity = parseInt(req.params.quantity);
-  const candles = null;
-  return res.json({
-    status: true,
-  })
+route.get("/:currency/:quantity", async (req, res, next) => {
+  return GetCandles.route(req, res, next);
 })
 
 export default route;
