@@ -21,4 +21,19 @@ db.raw("SELECT 1").then(() => {
   throw new Error("Erro ao se conectar com o banco de dados.")
 })
 
+console.log("Verificando se a tabela <candles> existe.")
+db.schema.hasTable("candles").then((exists) => {
+  if (!exists) {
+    console.log("Tabela <candles> nao existe.")
+    console.log("Criando tabela <candles>.")
+    return db.schema.createTable("candles", (table) => {
+      table.increments("id").primary().notNullable();
+      table.string("color", 20).notNullable();
+      table.string("currency", 5).notNullable();
+      table.double("value", 2).notNullable();
+      table.timestamp("created_at");
+    })
+  } else { console.log("Tabela <candles> ja existente.") }
+})
+
 export default db;
