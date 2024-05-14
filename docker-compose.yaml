@@ -20,9 +20,9 @@ services:
     env_file:
       - .env
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: default
+      POSTGRES_USER: ${USER_DB}
+      POSTGRES_PASSWORD: ${PASSWORD_DB}
+      POSTGRES_DB: ${DATABASE}
     volumes:
        - ./data:/var/lib/postgresql/data
     ports:
