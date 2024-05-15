@@ -6,7 +6,7 @@ import app from "./app.js";
 process.setMaxListeners(15);
 
 const serverInit = async () => {
-  app.listen(process.env.PORT, () => {
+  const server = app.listen(process.env.PORT, () => {
     console.log(`Servidor rodando na porta ${process.env.PORT}.`);
   })
 
@@ -15,7 +15,7 @@ const serverInit = async () => {
   await consumer_candle(channel)
 
   process.on('SIGINT', async () => {
-    server.close()
+    server.close();
   })
 }
 
